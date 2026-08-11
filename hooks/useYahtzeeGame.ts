@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { Category, DiceValue, GameState, Player, ThrowMode } from "@/lib/types";
 import { loadGameState, saveGameState, clearGameState } from "@/lib/storage";
 
@@ -119,6 +119,7 @@ function reducer(state: GameState, action: Action): GameState {
 export function useYahtzeeGame() {
   const [state, dispatch] = useReducer(reducer, null as unknown as GameState);
   const loadedRef = useRef(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (loadedRef.current) return;
@@ -127,6 +128,7 @@ export function useYahtzeeGame() {
     if (saved) {
       dispatch({ type: "LOAD", state: saved });
     }
+    setLoaded(true);
   }, []);
 
   useEffect(() => {
@@ -163,6 +165,7 @@ export function useYahtzeeGame() {
 
   return {
     state,
+    loaded,
     startGame,
     roll,
     toggleHold,

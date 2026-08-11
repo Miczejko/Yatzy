@@ -16,6 +16,7 @@ export default function GamePage() {
   const router = useRouter();
   const {
     state,
+    loaded,
     roll,
     toggleHold,
     setManualDice,
@@ -31,10 +32,10 @@ export default function GamePage() {
   }, []);
 
   useEffect(() => {
-    if (state === null) {
+    if (loaded && state === null) {
       router.replace("/");
     }
-  }, [state, router]);
+  }, [loaded, state, router]);
 
   if (!state || !settings) return null;
 
