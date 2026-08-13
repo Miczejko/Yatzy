@@ -1,10 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
-import { Category, DiceValue, GameState, Player, ThrowMode } from "@/lib/types";
+import {
+  Category,
+  DiceValue,
+  GameState,
+  MAX_ROLLS,
+  PLAYER_COLORS,
+  RoomPlayer,
+  ThrowMode,
+} from "@/lib/types";
 import { loadGameState, saveGameState, clearGameState } from "@/lib/storage";
-
-const MAX_ROLLS = 3;
 
 function randomDie(): DiceValue {
   return (Math.floor(Math.random() * 6) + 1) as DiceValue;
@@ -14,9 +20,12 @@ export function createInitialState(
   playerNames: string[],
   throwMode: ThrowMode
 ): GameState {
-  const players: Player[] = playerNames.map((name, i) => ({
+  const players: RoomPlayer[] = playerNames.map((name, i) => ({
     id: `p${i}-${Date.now()}`,
     name: name.trim() || `Gracz ${i + 1}`,
+    color: PLAYER_COLORS[i % PLAYER_COLORS.length],
+    isHost: i === 0,
+    connectionStatus: "connected",
     scores: {},
   }));
   return {

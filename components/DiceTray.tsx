@@ -8,6 +8,7 @@ interface DiceTrayProps {
   held: boolean[];
   rollsUsed: number;
   maxRolls: number;
+  disabled?: boolean;
   onRoll: () => void;
   onToggleHold: (index: number) => void;
 }
@@ -17,12 +18,13 @@ export default function DiceTray({
   held,
   rollsUsed,
   maxRolls,
+  disabled = false,
   onRoll,
   onToggleHold,
 }: DiceTrayProps) {
   const rollsLeft = maxRolls - rollsUsed;
-  const canRoll = rollsLeft > 0;
-  const canHold = rollsUsed > 0 && rollsUsed < maxRolls;
+  const canRoll = rollsLeft > 0 && !disabled;
+  const canHold = rollsUsed > 0 && rollsUsed < maxRolls && !disabled;
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -50,10 +52,14 @@ export default function DiceTray({
           Rzuty: {rollsUsed}/{maxRolls}
         </span>
       </div>
-      {!canRoll && (
-        <p className="text-sm text-slate-500">
-          Wykorzystano wszystkie rzuty — wybierz kategorię poniżej.
-        </p>
+      {disabled ? (
+        <p className="text-sm text-slate-500">Czekaj na swoją turę...</p>
+      ) : (
+        !canRoll && (
+          <p className="text-sm text-slate-500">
+            Wykorzystano wszystkie rzuty — wybierz kategorię poniżej.
+          </p>
+        )
       )}
     </div>
   );

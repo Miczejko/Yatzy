@@ -1,6 +1,6 @@
 "use client";
 
-import { Category, DiceValue, Player, UPPER_CATEGORIES, LOWER_CATEGORIES } from "@/lib/types";
+import { Category, DiceValue, UPPER_CATEGORIES, LOWER_CATEGORIES } from "@/lib/types";
 import { calculateScore, upperSectionSum, upperBonus } from "@/lib/scoring";
 import { ScoringSettings } from "@/lib/scoringSettings";
 import ScoreRow from "./ScoreRow";
@@ -22,7 +22,7 @@ const LABELS: Record<Category, string> = {
 };
 
 interface ScoreCardProps {
-  player: Player;
+  player: { scores: Partial<Record<Category, number>> };
   dice: DiceValue[];
   canSelect: boolean;
   settings: ScoringSettings;

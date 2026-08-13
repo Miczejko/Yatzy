@@ -1,9 +1,9 @@
 "use client";
 
-import { Player } from "@/lib/types";
+import { RoomPlayer } from "@/lib/types";
 
 interface PlayerTabsProps {
-  players: Player[];
+  players: RoomPlayer[];
   currentPlayerIndex: number;
 }
 
@@ -24,13 +24,20 @@ export default function PlayerTabs({
       {players.map((p, i) => (
         <div
           key={p.id}
-          className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition ${
+          className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition ${
             i === currentPlayerIndex
               ? "bg-indigo-600 text-white shadow"
               : "bg-white text-slate-500 border border-slate-200"
           }`}
         >
+          <span
+            className="w-2.5 h-2.5 rounded-full"
+            style={{ backgroundColor: p.color }}
+          />
           {p.name}
+          {p.connectionStatus === "disconnected" && (
+            <span className="text-xs opacity-70">(rozłączony)</span>
+          )}
         </div>
       ))}
     </div>

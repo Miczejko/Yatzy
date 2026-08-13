@@ -64,6 +64,7 @@ export default function GamePage() {
       <GameControls
         round={state.round}
         totalRounds={13}
+        isHost
         onEndGame={handleEndGame}
       />
 

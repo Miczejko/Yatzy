@@ -3,37 +3,65 @@
 import { useState } from "react";
 import { ThrowMode } from "@/lib/types";
 
-interface SetupFormProps {
-  initialNickname?: string;
-  initialThrowMode?: ThrowMode;
-  onStart: (nickname: string, throwMode: ThrowMode) => void;
+interface OfflineSetupFormProps {
+  onStart: (playerNames: string[], throwMode: ThrowMode) => void;
 }
 
-export default function SetupForm({
-  initialNickname = "",
-  initialThrowMode = "virtual",
-  onStart,
-}: SetupFormProps) {
-  const [nickname, setNickname] = useState(initialNickname);
-  const [throwMode, setThrowMode] = useState<ThrowMode>(initialThrowMode);
+export default function OfflineSetupForm({ onStart }: OfflineSetupFormProps) {
+  const [numPlayers, setNumPlayers] = useState(1);
+  const [names, setNames] = useState<string[]>(["", "", "", ""]);
+  const [throwMode, setThrowMode] = useState<ThrowMode>("virtual");
+
+  const setName = (index: number, value: string) => {
+    setNames((prev) => {
+      const next = [...prev];
+      next[index] = value;
+      return next;
+    });
+  };
 
   const handleStart = () => {
-    onStart(nickname.trim() || "Gracz 1", throwMode);
+    const playerNames = names
+      .slice(0, numPlayers)
+      .map((n, i) => n.trim() || `Gracz ${i + 1}`);
+    onStart(playerNames, throwMode);
   };
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-md mx-auto">
       <div>
         <label className="block text-sm font-semibold text-slate-600 mb-2">
-          Twój nick
+          Liczba graczy
         </label>
-        <input
-          type="text"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          placeholder="Gracz 1"
-          className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 text-lg"
-        />
+        <div className="grid grid-cols-4 gap-2">
+          {[1, 2, 3, 4].map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => setNumPlayers(n)}
+              className={`py-3 rounded-xl font-bold text-lg border-2 transition ${
+                numPlayers === n
+                  ? "bg-indigo-600 border-indigo-600 text-white"
+                  : "bg-white border-slate-300 text-slate-700"
+              }`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: numPlayers }, (_, i) => (
+          <input
+            key={i}
+            type="text"
+            value={names[i]}
+            onChange={(e) => setName(i, e.target.value)}
+            placeholder={`Gracz ${i + 1}`}
+            className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 text-lg"
+          />
+        ))}
       </div>
 
       <div>
@@ -85,7 +113,7 @@ export default function SetupForm({
         onClick={handleStart}
         className="px-6 py-4 rounded-2xl bg-emerald-600 text-white text-lg font-bold shadow active:scale-95 transition"
       >
-        Stwórz pokój
+        Rozpocznij grę
       </button>
     </div>
   );

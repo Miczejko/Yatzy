@@ -1,12 +1,12 @@
 "use client";
 
-import { Player, UPPER_CATEGORIES, LOWER_CATEGORIES } from "@/lib/types";
+import { RoomPlayer, UPPER_CATEGORIES, LOWER_CATEGORIES } from "@/lib/types";
 import { ScoringSettings } from "@/lib/scoringSettings";
 import { upperSectionSum, upperBonus, lowerSectionSum, totalScore } from "@/lib/scoring";
 import { LABELS } from "./ScoreCard";
 
 interface GameOverModalProps {
-  players: Player[];
+  players: RoomPlayer[];
   settings: ScoringSettings;
   onClose: () => void;
 }
